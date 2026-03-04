@@ -1,0 +1,39 @@
+root = true
+
+[*.cs]
+
+############################
+# FORMATTING
+############################
+
+indent_style = space
+indent_size = 4
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+############################
+# USING DIRECTIVES / IMPORTS
+############################
+
+# Remove unused using directives
+dotnet_diagnostic.IDE0005.severity = warning
+
+# Place System directives first
+dotnet_sort_system_directives_first = true
+
+# Separate using directive groups with a blank line
+dotnet_separate_import_directive_groups = true
+
+############################
+# GENERAL STYLE (RECOMMENDED)
+############################
+
+# Require 'this.' qualification for private fields
+dotnet_style_qualification_for_field = true:suggestion
+
+# Prefer 'var' when the type is obvious
+csharp_style_var_when_type_is_apparent = true:suggestion
+
+# Prefer expression-bodied members when they fit on one line
+csharp_style_expression_bodied_methods = when_on_single_line:suggestion
