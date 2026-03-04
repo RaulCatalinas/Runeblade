@@ -7,11 +7,7 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
+        if (Instance == null) Instance = this;
     }
 
     public void LoadScene(string sceneName)
@@ -21,13 +17,16 @@ public class GameManager : MonoBehaviour
 
     public void QuitGame()
     {
-        if (Application.isEditor) UnityEditor.EditorApplication.isPlaying = false;
-        else Application.Quit();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
     }
 
     public void GoToSettings()
     {
-        Debug.Log("Going to settings...");
+        LoadScene("Settings");
     }
 
     public void GoToMainMenu()
@@ -37,6 +36,6 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        Debug.Log("Starting game...");
+        LoadScene("Game");
     }
 }
