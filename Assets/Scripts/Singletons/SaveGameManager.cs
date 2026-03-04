@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 using UnityEngine;
 
@@ -24,7 +25,6 @@ public struct GameSaveData
     public string saveTimestamp;
 }
 
-
 public class SaveGameManager : MonoBehaviour
 {
     public static SaveGameManager Instance { get; private set; }
@@ -38,68 +38,103 @@ public class SaveGameManager : MonoBehaviour
         }
     }
 
-    public void SaveGame(int slotNumber, ref GameSaveData data)
+    public async Task<bool> SaveGame(int slotNumber, GameSaveData data)
     {
-        data.saveTimestamp = DateTime.Now.ToString("yyyy-MM-dd");
+        try
+        {
+            var jsonData = JsonUtility.ToJson(data);
+            var savePath = await GetSaveFilePath(slotNumber);
 
-        var jsonData = JsonUtility.ToJson(data);
-        var savePath = GetSaveFilePath(slotNumber);
+            await File.WriteAllTextAsync(savePath, jsonData, Encoding.UTF8);
 
-        File.WriteAllText(savePath, jsonData, Encoding.UTF8);
-        Debug.Log("Game saved!");
+            Debug.Log("Game saved!");
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Failed to save game: {e.Message}");
+
+            return false;
+        }
     }
 
-    public GameSaveData? LoadGame(int slotNumber)
+    public async Task<GameSaveData?> LoadGame(int slotNumber)
     {
-        if (!ExitSave(slotNumber))
+        try
         {
-            Debug.LogError("No save file found for this slot!");
+            if (!await SaveExists(slotNumber))
+            {
+                Debug.LogError("No save file found for this slot!");
+
+                return null;
+            }
+
+            var savePath = await GetSaveFilePath(slotNumber);
+            var jsonData = await File.ReadAllTextAsync(savePath, Encoding.UTF8);
+
+            return JsonUtility.FromJson<GameSaveData>(jsonData);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Failed to load game: {e.Message}");
+
             return null;
         }
-
-        var jsonData = File.ReadAllText($"save_{slotNumber}.json");
-
-        return JsonUtility.FromJson<GameSaveData>(jsonData); ;
     }
 
-    public void DeleteSave(int slotNumber)
+    public async Task<bool> DeleteSave(int slotNumber)
     {
-        var savePath = GetSaveFilePath(slotNumber);
-
-        if (!File.Exists(savePath))
+        try
         {
-            Debug.LogError("No save file found to delete!");
-            return;
+            var savePath = await GetSaveFilePath(slotNumber);
+
+            if (!await SaveExists(slotNumber))
+            {
+                Debug.LogError("No save file found to delete!");
+
+                return false;
+            }
+
+            await Task.Run(() => File.Delete(savePath));
+
+            Debug.Log("Save file deleted.");
+
+            return true;
         }
-
-        File.Delete(savePath);
-        Debug.Log("Save file deleted.");
+        catch (Exception e)
+        {
+            Debug.LogError($"Failed to delete save: {e.Message}");
+            return false;
+        }
     }
 
-    public bool ExitSave(int slotNumber)
+    public async Task<bool> SaveExists(int slotNumber)
     {
-        var savePath = GetSaveFilePath(slotNumber);
+        var savePath = await GetSaveFilePath(slotNumber);
 
-        return File.Exists(savePath);
+        return await Task.FromResult(File.Exists(savePath));
     }
 
-    public string GetSaveSlotText(int slotNumber)
+    public async Task<string> GetSaveSlotText(int slotNumber)
     {
-        if (!ExitSave(slotNumber)) return "New Game";
+        if (!await SaveExists(slotNumber)) return "New Game";
 
-        var jsonData = File.ReadAllText(GetSaveFilePath(slotNumber));
+        var savePath = await GetSaveFilePath(slotNumber);
+        var jsonData = await File.ReadAllTextAsync(savePath);
         var savedData = JsonUtility.FromJson<GameSaveData>(jsonData);
 
         return $"World {savedData.currentWorld} - Level {savedData.currentLevel}\nSaved on: {savedData.saveTimestamp}";
     }
 
-    string GetSaveFilePath(int slotNumber)
+    async Task<string> GetSaveFilePath(int slotNumber)
     {
         var directory = Path.Combine(Application.persistentDataPath, ".runeblade");
+        var existDirectory = await Task.FromResult(Directory.Exists(directory));
 
-        if (!Directory.Exists(directory))
+        if (!existDirectory)
         {
-            Directory.CreateDirectory(directory);
+            await Task.Run(() => Directory.CreateDirectory(directory));
         }
 
         return Path.Combine(directory, $"save_{slotNumber}.json");
