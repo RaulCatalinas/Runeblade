@@ -45,6 +45,7 @@ public class PlayerController : MonoBehaviour
     private float coyoteTimeCounter = 0f;
     private bool canDoubleJump = false;
     private bool doubleJumpUnlocked = true;
+    private bool isJumping = false;
 
     void Start()
     {
@@ -82,6 +83,7 @@ public class PlayerController : MonoBehaviour
         {
             coyoteTimeCounter = coyoteTime;
             canDoubleJump = doubleJumpUnlocked;
+            isJumping = false;
         }
         else
         {
@@ -91,18 +93,18 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
-        rb.linearVelocityY = jumpForce;
-        jumpRequested = false;
-
-        if (coyoteTimeCounter > 0f)
+        if (coyoteTimeCounter > 0f && !isJumping)
         {
-            coyoteTimeCounter = 0f;
+            isJumping = true;
+            rb.linearVelocityY = jumpForce;
         }
-        else if (canDoubleJump)
+        else if (canDoubleJump && !IsGrounded())
         {
             rb.linearVelocityY = doubleJumpForce;
             canDoubleJump = false;
         }
+
+        jumpRequested = false;
     }
 
     public void OnMove(InputValue value)
