@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float doubleJumpForce = 10f;
     [SerializeField] private float acceleration = 0.5f;
+    [SerializeField] private float dashSpeed = 10f;
 
     [Header("Coyote Time Settings")]
     [SerializeField] private float coyoteTime = 0.2f;
@@ -47,10 +48,12 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveInput;
     private bool jumpRequested = false;
     private bool attackRequested = false;
+    private bool dashRequested = false;
     private float coyoteTimeCounter = 0f;
     private bool canDoubleJump = false;
     private bool doubleJumpUnlocked = true;
     private bool isJumping = false;
+    private Vector2 lastDirection = Vector2.right;
 
     void Start()
     {
@@ -70,11 +73,14 @@ public class PlayerController : MonoBehaviour
 
         if (jumpRequested) Jump();
         if (attackRequested) Attack();
+        if (dashRequested) Dash();
     }
 
     void Move()
     {
         var targetVelocityX = moveInput.x * moveSpeed;
+
+        if (moveInput.x != 0) lastDirection = moveInput;
 
         rb.linearVelocityX = Mathf.MoveTowards(
             rb.linearVelocityX,
@@ -118,6 +124,17 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Attacking...");
     }
 
+    void Dash()
+    {
+        dashRequested = false;
+
+        if (moveInput.x < 0) rb.linearVelocityX = -dashSpeed;
+        else if (moveInput.x > 0) rb.linearVelocityX = dashSpeed;
+        else if (lastDirection.x < 0) rb.linearVelocityX = -dashSpeed;
+        else if (lastDirection.x > 0) rb.linearVelocityX = dashSpeed;
+        else rb.linearVelocityX = dashSpeed;
+    }
+
     public void OnMove(InputValue value)
     {
         // TODO: Add running animation trigger here
@@ -138,6 +155,13 @@ public class PlayerController : MonoBehaviour
         // TODO: Add attack animation trigger here
 
         if (value.isPressed) attackRequested = true;
+    }
+
+    public void OnDash(InputValue value)
+    {
+        // TODO: Add dash animation trigger here
+
+        if (value.isPressed) dashRequested = true;
     }
 
     bool IsGrounded()

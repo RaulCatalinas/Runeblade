@@ -535,6 +535,7 @@ MonoBehaviour:
   jumpForce: 5
   doubleJumpForce: 6
   acceleration: 0.5
+  dashSpeed: 25
   coyoteTime: 0.2
   rb: {fileID: 1645675114}
   spriteRenderer: {fileID: 1645675116}
@@ -542,7 +543,7 @@ MonoBehaviour:
   raycastStartPoint: {fileID: 988159216}
   raycastLength: 0.5
   damage: 3.5
-  sword: {fileID: 2016177345}
+  sword: {fileID: 2016177346}
 --- !u!4 &1645675118
 Transform:
   m_ObjectHideFlags: 0
