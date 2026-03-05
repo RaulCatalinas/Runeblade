@@ -120,6 +120,7 @@ public class PlayerController : MonoBehaviour
 
     void Attack()
     {
+        attackRequested = false;
         Debug.Log("Attacking...");
     }
 
