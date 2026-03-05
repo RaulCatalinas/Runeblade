@@ -541,6 +541,8 @@ MonoBehaviour:
   raycastDirection: 1
   raycastStartPoint: {fileID: 988159216}
   raycastLength: 0.5
+  damage: 3.5
+  sword: {fileID: 2016177345}
 --- !u!4 &1645675118
 Transform:
   m_ObjectHideFlags: 0
