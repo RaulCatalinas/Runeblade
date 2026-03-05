@@ -5,7 +5,6 @@ root = true
 ############################
 # FORMATTING
 ############################
-
 indent_style = space
 indent_size = 4
 end_of_line = lf
@@ -15,7 +14,6 @@ trim_trailing_whitespace = true
 ############################
 # USING DIRECTIVES / IMPORTS
 ############################
-
 dotnet_diagnostic.IDE0005.severity = warning
 dotnet_diagnostic.IDE0051.severity = warning
 dotnet_diagnostic.IDE0052.severity = warning
@@ -23,22 +21,51 @@ dotnet_diagnostic.IDE0054.severity = warning
 dotnet_diagnostic.IDE0074.severity = warning
 dotnet_diagnostic.IDE0060.severity = warning
 
-# Place System directives first
 dotnet_sort_system_directives_first = true
-
-# Separate using directive groups with a blank line
 dotnet_separate_import_directive_groups = true
 
 ############################
-# GENERAL STYLE (RECOMMENDED)
+# GENERAL STYLE
 ############################
-
 dotnet_style_prefer_compound_assignment = true
 dotnet_style_qualification_for_field = true:suggestion
 dotnet_code_quality_unused_parameters = all
-
-# Prefer 'var' when the type is obvious
 csharp_style_var_when_type_is_apparent = true:suggestion
-
-# Prefer expression-bodied members when they fit on one line
 csharp_style_expression_bodied_methods = when_on_single_line:suggestion
+csharp_style_prefer_inferred_tuple_names = true:suggestion
+csharp_style_prefer_readonly = true:suggestion
+
+############################
+# NAMING CONVENTIONS
+############################
+
+# Private fields start with underscore
+dotnet_naming_rule.private_fields_underscore.severity = suggestion
+dotnet_naming_rule.private_fields_underscore.symbols = private_fields
+dotnet_naming_rule.private_fields_underscore.style = underscore_style
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.accessibility = private
+
+dotnet_naming_style.underscore_style.capitalization = camel_case
+dotnet_naming_style.underscore_style.required_prefix = _
+
+# Public fields, properties, methods PascalCase
+dotnet_naming_rule.public_members_pascal.severity = suggestion
+dotnet_naming_rule.public_members_pascal.symbols = public_members
+dotnet_naming_rule.public_members_pascal.style = pascal_style
+
+dotnet_naming_symbols.public_members.applicable_kinds = property, method, field
+dotnet_naming_symbols.public_members.accessibility = public
+
+dotnet_naming_style.pascal_style.capitalization = pascal_case
+
+# Constants UPPER_CASE
+dotnet_naming_rule.constants_uppercase.severity = suggestion
+dotnet_naming_rule.constants_uppercase.symbols = constant_fields
+dotnet_naming_rule.constants_uppercase.style = uppercase_style
+
+dotnet_naming_symbols.constant_fields.applicable_kinds = field
+dotnet_naming_symbols.constant_fields.required_modifiers = const
+
+dotnet_naming_style.uppercase_style.capitalization = all_upper
