@@ -376,6 +376,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1645675118}
   - component: {fileID: 1645675117}
+  - component: {fileID: 1645675123}
+  - component: {fileID: 1645675122}
   - component: {fileID: 1645675121}
   - component: {fileID: 1645675116}
   - component: {fileID: 1645675115}
@@ -533,20 +535,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5af07466fcbc353489089e56122609b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  moveSpeed: 5
-  jumpForce: 5
-  doubleJumpForce: 6
-  acceleration: 0.5
-  dashSpeed: 25
-  coyoteTime: 0.2
-  rb: {fileID: 1645675114}
+  movementController: {fileID: 1645675123}
+  combatController: {fileID: 1645675122}
   spriteRenderer: {fileID: 1645675116}
-  playerAnimator: {fileID: 1645675121}
-  raycastDirection: 1
-  raycastStartPoint: {fileID: 988159216}
-  raycastLength: 0.5
-  damage: 3.5
-  sword: {fileID: 2016177346}
 --- !u!4 &1645675118
 Transform:
   m_ObjectHideFlags: 0
@@ -629,6 +620,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimator
   animator: {fileID: 1645675120}
+--- !u!114 &1645675122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1645675113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17bd72ba9464b48b38fdb242e8c44360, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCombatController
+  damage: 3.5
+  sword: {fileID: 2016177346}
+  playerAnimator: {fileID: 1645675121}
+--- !u!114 &1645675123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1645675113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a7999f7f789f4ac184b5dc83f567e04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovementController
+  moveSpeed: 5
+  jumpForce: 5
+  doubleJumpForce: 6
+  acceleration: 0.5
+  dashSpeed: 25
+  coyoteTime: 0.2
+  rb: {fileID: 1645675114}
+  playerAnimator: {fileID: 1645675121}
+  raycastStartPoint: {fileID: 988159216}
+  raycastLength: 0.4
 --- !u!1 &1690687721
 GameObject:
   m_ObjectHideFlags: 0
