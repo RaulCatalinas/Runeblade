@@ -20,6 +20,7 @@ dotnet_diagnostic.IDE0052.severity = warning
 dotnet_diagnostic.IDE0054.severity = warning
 dotnet_diagnostic.IDE0074.severity = warning
 dotnet_diagnostic.IDE0060.severity = warning
+dotnet_diagnostic.IDE0044.severity = warning
 
 dotnet_sort_system_directives_first = true
 dotnet_separate_import_directive_groups = true
@@ -28,8 +29,9 @@ dotnet_separate_import_directive_groups = true
 # GENERAL STYLE
 ############################
 dotnet_style_prefer_compound_assignment = true
-dotnet_style_qualification_for_field = true:suggestion
+dotnet_style_qualification_for_field = false
 dotnet_code_quality_unused_parameters = all
+
 csharp_style_var_when_type_is_apparent = true:suggestion
 csharp_style_expression_bodied_methods = when_on_single_line:suggestion
 csharp_style_prefer_inferred_tuple_names = true:suggestion
