@@ -1,15 +1,14 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-/*
 public enum PlayerState
 {
     Idle,
     Running,
     Jumping,
-    Falling
+    Falling,
+    Attacking
 }
-*/
 
 
 public enum RaycastDirection
@@ -40,8 +39,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform raycastStartPoint;
     [SerializeField] private float raycastLength = 0.1f;
 
+    [Header("Attack settings")]
+    [SerializeField] private float damage = 3.5f;
+    [SerializeField] private Transform sword;
+
+
     private Vector2 moveInput;
     private bool jumpRequested = false;
+    private bool attackRequested = false;
     private float coyoteTimeCounter = 0f;
     private bool canDoubleJump = false;
     private bool doubleJumpUnlocked = true;
@@ -64,6 +69,7 @@ public class PlayerController : MonoBehaviour
         UpdateJumpState();
 
         if (jumpRequested) Jump();
+        if (attackRequested) Attack();
     }
 
     void Move()
@@ -107,6 +113,11 @@ public class PlayerController : MonoBehaviour
         jumpRequested = false;
     }
 
+    void Attack()
+    {
+        Debug.Log("Attacking...");
+    }
+
     public void OnMove(InputValue value)
     {
         // TODO: Add running animation trigger here
@@ -120,6 +131,13 @@ public class PlayerController : MonoBehaviour
         // TODO: Add jump animation trigger here
 
         if (value.isPressed) jumpRequested = true;
+    }
+
+    public void OnAttack(InputValue value)
+    {
+        // TODO: Add attack animation trigger here
+
+        if (value.isPressed) attackRequested = true;
     }
 
     bool IsGrounded()
