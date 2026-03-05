@@ -44,7 +44,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float damage = 3.5f;
     [SerializeField] private Transform sword;
 
-
     private Vector2 moveInput;
     private bool jumpRequested = false;
     private bool attackRequested = false;
