@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
     [Header("Player Components")]
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private PlayerAnimator playerAnimator;
 
     [Header("Raycast Settings")]
     [SerializeField] private RaycastDirection raycastDirection = RaycastDirection.Down;
@@ -95,10 +96,17 @@ public class PlayerController : MonoBehaviour
             coyoteTimeCounter = coyoteTime;
             canDoubleJump = doubleJumpUnlocked;
             isJumping = false;
+            playerAnimator.SetFallingAnimation(false);
         }
         else
         {
             coyoteTimeCounter -= Time.fixedDeltaTime;
+
+            if (rb.linearVelocityY < 0)
+            {
+                playerAnimator.SetJumpAnimation(false);
+                playerAnimator.SetFallingAnimation(true);
+            }
         }
     }
 
@@ -122,6 +130,7 @@ public class PlayerController : MonoBehaviour
     {
         attackRequested = false;
         Debug.Log("Attacking...");
+        playerAnimator.SetAttackAnimation(false);
     }
 
     void Dash()
@@ -133,33 +142,37 @@ public class PlayerController : MonoBehaviour
         else if (lastDirection.x < 0) rb.linearVelocityX = -dashSpeed;
         else if (lastDirection.x > 0) rb.linearVelocityX = dashSpeed;
         else rb.linearVelocityX = dashSpeed;
+
+        playerAnimator.SetDashAnimation(false);
     }
 
     public void OnMove(InputValue value)
     {
-        // TODO: Add running animation trigger here
+        var move = value.Get<Vector2>();
 
-        spriteRenderer.flipX = value.Get<Vector2>().x < 0;
-        moveInput = value.Get<Vector2>();
+        playerAnimator.SetMoveAnimation(move.x != 0);
+
+        spriteRenderer.flipX = move.x < 0;
+        moveInput = move;
     }
 
     public void OnJump(InputValue value)
     {
-        // TODO: Add jump animation trigger here
+        playerAnimator.SetJumpAnimation(true);
 
         if (value.isPressed) jumpRequested = true;
     }
 
     public void OnAttack(InputValue value)
     {
-        // TODO: Add attack animation trigger here
+        playerAnimator.SetAttackAnimation(true);
 
         if (value.isPressed) attackRequested = true;
     }
 
     public void OnDash(InputValue value)
     {
-        // TODO: Add dash animation trigger here
+        playerAnimator.SetDashAnimation(true);
 
         if (value.isPressed) dashRequested = true;
     }
