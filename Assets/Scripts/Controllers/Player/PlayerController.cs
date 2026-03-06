@@ -11,12 +11,12 @@ public class PlayerController : MonoBehaviour
     private bool jumpRequested = false;
     private bool attackRequested = false;
     private bool dashRequested = false;
-    private Vector3 lastCheckpointActivated;
 
     void Start()
     {
-        lastCheckpointActivated = startPoint.position;
         gameObject.transform.position = startPoint.position;
+
+        GameManager.Instance.ActivateCheckpoint(startPoint.position);
     }
 
     void FixedUpdate()
@@ -66,21 +66,19 @@ public class PlayerController : MonoBehaviour
         if (value.isPressed) dashRequested = true;
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Checkpoint"))
-        {
-            Debug.Log("Checkpoint activated");
-            lastCheckpointActivated = collision.transform.position;
-        }
-    }
-
     void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("WorldLimit"))
         {
             Debug.Log("The player has gone beyond the boundaries of the world. Reappearing in the last safe position.");
-            gameObject.transform.position = lastCheckpointActivated;
+
+            var lastCheckpointActivated = GameManager.Instance.checkpointActivated;
+            var respawnPoint =
+                lastCheckpointActivated != null
+                    ? lastCheckpointActivated
+                    : startPoint.position;
+
+            gameObject.transform.position = respawnPoint;
         }
     }
 }

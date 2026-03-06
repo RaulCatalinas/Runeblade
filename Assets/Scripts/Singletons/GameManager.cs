@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public bool IsGamePaused { get; private set; }
     public GameSaveData? gameData { get; private set; }
     public int currentSlotNumber { get; private set; }
+    public Vector3 checkpointActivated { get; private set; }
 
     void Awake()
     {
@@ -64,5 +65,10 @@ public class GameManager : MonoBehaviour
     {
         IsGamePaused = !IsGamePaused;
         Time.timeScale = IsGamePaused ? 0 : 1;
+    }
+
+    public void ActivateCheckpoint(Vector3 checkpointPosition)
+    {
+        checkpointActivated = checkpointPosition;
     }
 }

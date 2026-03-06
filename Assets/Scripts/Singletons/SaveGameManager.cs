@@ -132,6 +132,8 @@ public class SaveGameManager : MonoBehaviour
         var directory = Path.Combine(Application.persistentDataPath, ".runeblade");
         var existDirectory = await Task.FromResult(Directory.Exists(directory));
 
+        Debug.Log($"Game saved at {directory}");
+
         if (!existDirectory)
         {
             await Task.Run(() => Directory.CreateDirectory(directory));
