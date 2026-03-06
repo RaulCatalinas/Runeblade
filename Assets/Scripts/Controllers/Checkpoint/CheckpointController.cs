@@ -3,17 +3,16 @@ using UnityEngine;
 public class CheckpointController : MonoBehaviour
 {
     [SerializeField] private CheckpointAnimator checkpointAnimator;
+    [SerializeField] private Collider2D checkpointCollider;
 
-    private bool isActivated = false;
-
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!collision.collider.CompareTag("Player") || isActivated) return;
+        if (!collision.CompareTag("Player")) return;
+
+        checkpointCollider.enabled = false;
 
         checkpointAnimator.SetActivatedAnimation(true);
         GameManager.Instance.ActivateCheckpoint(gameObject.transform.position);
-
-        isActivated = true;
 
         Debug.Log("Checkpoint activated");
     }
