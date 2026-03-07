@@ -2,13 +2,17 @@ using System;
 
 using UnityEngine;
 
-public class WaypointPlatformController : MonoBehaviour
+public class PlatformController : MonoBehaviour
 {
+    [Header("Platform")]
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform[] waypoints;
     [SerializeField] private bool randomizeMovement = false;
     [SerializeField] private float moveSpeed = 3.5f;
     [SerializeField] private float arrivalThreshold = 0.01f;
+
+    [Header("Activation")]
+    [SerializeField] private Transform player;
 
     private int currentWaypointIndex = 0;
     private bool goingForward = true;
@@ -17,6 +21,7 @@ public class WaypointPlatformController : MonoBehaviour
     private Vector2 lastPosition;
     private Vector2 platformVelocity;
     private Rigidbody2D rbPlayer;
+    private bool isActive;
 
     void Awake()
     {
@@ -27,14 +32,19 @@ public class WaypointPlatformController : MonoBehaviour
             );
         }
 
-        horizontalConstraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionY;
-        verticalConstraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionX;
-
         lastPosition = rb.position;
+        horizontalConstraints =
+            RigidbodyConstraints2D.FreezeRotation
+            | RigidbodyConstraints2D.FreezePositionY;
+        verticalConstraints =
+            RigidbodyConstraints2D.FreezeRotation
+            | RigidbodyConstraints2D.FreezePositionX;
     }
 
     void FixedUpdate()
     {
+        if (!isActive) return;
+
         platformVelocity = (rb.position - lastPosition) / Time.fixedDeltaTime;
         lastPosition = rb.position;
 
@@ -91,6 +101,26 @@ public class WaypointPlatformController : MonoBehaviour
         var moveHorizontally = Mathf.Abs(direction.x) > Mathf.Abs(direction.y);
 
         rb.constraints = moveHorizontally ? horizontalConstraints : verticalConstraints;
+    }
+
+    public void ActivatePlatform()
+    {
+        rb.bodyType = RigidbodyType2D.Kinematic;
+        rb.simulated = true;
+        isActive = true;
+
+        Debug.Log($"[Platform] Activated: {gameObject.name}");
+    }
+
+    public void DeactivatePlatform()
+    {
+        rb.simulated = false;
+        rb.bodyType = RigidbodyType2D.Static;
+        isActive = false;
+        transform.position = waypoints[0].position;
+        lastPosition = rb.position;
+
+        Debug.Log($"[Platform] Deactivated: {gameObject.name}");
     }
 
     void OnCollisionEnter2D(Collision2D collision)
