@@ -15,7 +15,9 @@ public class PlatformController : MonoBehaviour
         movementController.Move();
 
         if (rbPlayer != null)
+        {
             rbPlayer.position += movementController.Delta;
+        }
     }
 
     public void ActivatePlatform()
