@@ -4,27 +4,29 @@ using UnityEngine;
 
 public class PlatformController : MonoBehaviour
 {
-    [Header("Platform")]
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform[] waypoints;
     [SerializeField] private bool randomizeMovement = false;
     [SerializeField] private float moveSpeed = 3.5f;
     [SerializeField] private float arrivalThreshold = 0.01f;
 
-    [Header("Activation")]
-    [SerializeField] private Transform player;
-
     private int currentWaypointIndex = 0;
     private bool goingForward = true;
     private RigidbodyConstraints2D horizontalConstraints;
     private RigidbodyConstraints2D verticalConstraints;
     private Vector2 lastPosition;
-    private Vector2 platformVelocity;
+    private Vector2 platformDelta;
     private Rigidbody2D rbPlayer;
     private bool isActive;
 
     void Awake()
     {
+        if (randomizeMovement && waypoints.Length < 3)
+        {
+            throw new InvalidOperationException(
+                "At least 3 waypoints are required for the platform to move."
+            );
+        }
         if (waypoints.Length < 2)
         {
             throw new InvalidOperationException(
@@ -45,18 +47,18 @@ public class PlatformController : MonoBehaviour
     {
         if (!isActive) return;
 
-        platformVelocity = (rb.position - lastPosition) / Time.fixedDeltaTime;
         lastPosition = rb.position;
 
         if (!randomizeMovement) MoveOnOrder();
         else MoveRandomly();
 
+        platformDelta = rb.position - lastPosition;
+
         if (rbPlayer != null)
         {
-            rbPlayer.position += platformVelocity * Time.fixedDeltaTime;
+            rbPlayer.position += platformDelta;
         }
     }
-
     void MoveOnOrder()
     {
         var target = waypoints[currentWaypointIndex].position;
@@ -93,7 +95,29 @@ public class PlatformController : MonoBehaviour
         }
     }
 
-    void MoveRandomly() { }
+    private int currentTargetIndex = -1;
+
+    void MoveRandomly()
+    {
+        if (currentTargetIndex == -1)
+        {
+            currentTargetIndex = UnityEngine.Random.Range(0, waypoints.Length);
+        }
+
+        var target = waypoints[currentTargetIndex].position;
+        var newPos = Vector2.MoveTowards(rb.position, target, moveSpeed * Time.fixedDeltaTime);
+
+        rb.MovePosition(newPos);
+
+        if (Vector2.Distance(rb.position, target) <= arrivalThreshold)
+        {
+            var newIndex = UnityEngine.Random.Range(0, waypoints.Length - 1);
+
+            if (newIndex >= currentTargetIndex) newIndex++;
+
+            currentTargetIndex = newIndex;
+        }
+    }
 
     void FreezeRigidbody(Vector2 moveTarget)
     {
@@ -108,6 +132,7 @@ public class PlatformController : MonoBehaviour
         rb.bodyType = RigidbodyType2D.Kinematic;
         rb.simulated = true;
         isActive = true;
+        lastPosition = rb.position;
 
         Debug.Log($"[Platform] Activated: {gameObject.name}");
     }

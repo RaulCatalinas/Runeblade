@@ -1725,7 +1725,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2687410437134510473, guid: 758dac93f85914122afcc6b60c1da418, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -53.3
+      value: -57.74
       objectReference: {fileID: 0}
     - target: {fileID: 2687410437134510473, guid: 758dac93f85914122afcc6b60c1da418, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2115,6 +2115,14 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1550849584}
+    - target: {fileID: 6230655387457419208, guid: 33f366f3ad6104cb5905034497e698b8, type: 3}
+      propertyPath: arrivalThreshold
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6230655387457419208, guid: 33f366f3ad6104cb5905034497e698b8, type: 3}
+      propertyPath: randomizeMovement
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6230655387457419208, guid: 33f366f3ad6104cb5905034497e698b8, type: 3}
       propertyPath: waypoints.Array.size
       value: 4
