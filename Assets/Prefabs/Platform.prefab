@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6642736698597141237}
   - component: {fileID: 6230655387457419208}
+  - component: {fileID: 1175272930326733907}
   - component: {fileID: 2208211739422811907}
   - component: {fileID: 8563699745912196399}
   - component: {fileID: 2533705274949713784}
@@ -48,13 +49,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaypointPlatfromController
   rb: {fileID: 2533705274949713784}
+  movementController: {fileID: 0}
+--- !u!114 &1175272930326733907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7395772470278449820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6794adb310252064983e1e1d6ac58c4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlatformMovementController
+  rb: {fileID: 2533705274949713784}
   waypoints: []
   randomizeMovement: 0
   moveSpeed: 3.5
   arrivalThreshold: 1.5
-  player: {fileID: 0}
-  activationDistance: 20
-  deactivationDistance: 25
 --- !u!212 &2208211739422811907
 SpriteRenderer:
   serializedVersion: 2
@@ -169,7 +181,7 @@ Rigidbody2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7395772470278449820}
   m_BodyType: 2
-  m_Simulated: 1
+  m_Simulated: 0
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
@@ -183,7 +195,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
