@@ -52,7 +52,7 @@ public class EnemyController : MonoBehaviour
 
     void Activate()
     {
-        rb.bodyType = RigidbodyType2D.Kinematic;
+        rb.bodyType = RigidbodyType2D.Dynamic;
         rb.simulated = true;
         enemyAnimator.ActivateAnimator();
         isActive = true;

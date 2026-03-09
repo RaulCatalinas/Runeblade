@@ -3,17 +3,18 @@ using UnityEngine;
 public class EnemyMovementController : MonoBehaviour
 {
     [SerializeField] private EnemyData enemyData;
+    [SerializeField] private EnemyAnimator enemyAnimator;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Transform player;
 
     public void Move()
     {
+        enemyAnimator.SetWalkingAnimation(true);
+
         var isPlayerToTheRight = player.position.x > transform.position.x;
-        var speed = enemyData.moveSpeed * Time.fixedDeltaTime;
 
         spriteRenderer.flipX = !isPlayerToTheRight;
-
-        rb.linearVelocityX = !isPlayerToTheRight ? speed : -speed;
+        rb.linearVelocityX = isPlayerToTheRight ? enemyData.moveSpeed : -enemyData.moveSpeed;
     }
 }
