@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaypointPlatfromController
   rb: {fileID: 2533705274949713784}
-  movementController: {fileID: 0}
+  movementController: {fileID: 1175272930326733907}
 --- !u!114 &1175272930326733907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,7 +64,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlatformMovementController
   rb: {fileID: 2533705274949713784}
   waypoints: []
-  randomizeMovement: 0
+  randomizeMovement: 1
   moveSpeed: 3.5
   arrivalThreshold: 1.5
 --- !u!212 &2208211739422811907
