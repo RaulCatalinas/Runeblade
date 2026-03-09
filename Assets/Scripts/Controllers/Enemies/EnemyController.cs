@@ -14,25 +14,33 @@ public class EnemyController : MonoBehaviour
 
     private bool isActive = false;
 
-    private float activationRangeSqr;
-    private float desActivationRangeSqr;
 
     void Awake()
     {
-        activationRangeSqr = Mathf.Pow(activationRange, 2);
-        desActivationRangeSqr = Mathf.Pow(desActivationRange, 2);
         circleCollider.radius = enemyData.detectionRange;
     }
 
     void FixedUpdate()
     {
-        var sqrDistance = (transform.position - player.position).sqrMagnitude;
-
-        if (!isActive && sqrDistance <= activationRangeSqr)
+        if (
+            !isActive
+            && RangeDetector.IsInRange(
+                transform.position,
+                player.position,
+                activationRange
+            )
+        )
         {
             Activate();
         }
-        else if (isActive && sqrDistance >= desActivationRangeSqr)
+        else if (
+            isActive
+            && RangeDetector.IsOutOfRange(
+                transform.position,
+                player.position,
+                desActivationRange
+            )
+        )
         {
             DesActivate();
         }
