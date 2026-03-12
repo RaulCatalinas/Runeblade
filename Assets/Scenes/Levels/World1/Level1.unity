@@ -517,7 +517,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 6
+  m_Constraints: 4
 --- !u!114 &336018639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -544,6 +544,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAttackController
   enemyData: {fileID: 11400000, guid: 2ca22aee885023547a78247560a494bd, type: 2}
+  rb: {fileID: 336018638}
+  animator: {fileID: 336018639}
 --- !u!114 &336018641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -557,7 +559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovementController
   enemyData: {fileID: 11400000, guid: 2ca22aee885023547a78247560a494bd, type: 2}
-  enemyAnimator: {fileID: 336018639}
+  animator: {fileID: 336018639}
   rb: {fileID: 336018638}
   spriteRenderer: {fileID: 336018635}
   player: {fileID: 1550849584}
@@ -576,12 +578,13 @@ MonoBehaviour:
   enemyData: {fileID: 11400000, guid: 2ca22aee885023547a78247560a494bd, type: 2}
   movementController: {fileID: 336018641}
   attackController: {fileID: 336018640}
-  enemyAnimator: {fileID: 336018639}
+  animator: {fileID: 336018639}
   rb: {fileID: 336018638}
   activationRange: 20
   desActivationRange: 25
   player: {fileID: 1550849584}
   circleCollider: {fileID: 336018643}
+  knockbackForce: 10
 --- !u!58 &336018643
 CircleCollider2D:
   m_ObjectHideFlags: 0

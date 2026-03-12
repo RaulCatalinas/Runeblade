@@ -7,6 +7,8 @@ public class PlatformController : MonoBehaviour
 
     private bool isActive;
     private Rigidbody2D rbPlayer;
+    float playerContactTimer;
+    const float CONTACT_GRACETIME = 0.1f;
 
     void FixedUpdate()
     {
@@ -14,9 +16,20 @@ public class PlatformController : MonoBehaviour
 
         movementController.Move();
 
-        if (rbPlayer != null)
+        if (rbPlayer == null) return;
+
+        rbPlayer.MovePosition(rbPlayer.position + movementController.Delta);
+
+        if (movementController.Delta.y > 0)
         {
-            rbPlayer.position += movementController.Delta;
+            rbPlayer.linearVelocityY = 0f;
+        }
+
+        playerContactTimer -= Time.fixedDeltaTime;
+
+        if (playerContactTimer <= 0f)
+        {
+            rbPlayer = null;
         }
     }
 
@@ -42,12 +55,15 @@ public class PlatformController : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (!collision.collider.CompareTag("Player")) return;
+
         rbPlayer = collision.collider.GetComponent<Rigidbody2D>();
+        playerContactTimer = CONTACT_GRACETIME;
     }
 
-    void OnCollisionExit2D(Collision2D collision)
+    void OnCollisionStay2D(Collision2D collision)
     {
         if (!collision.collider.CompareTag("Player")) return;
-        rbPlayer = null;
+
+        playerContactTimer = CONTACT_GRACETIME;
     }
 }

@@ -14,8 +14,13 @@ public class EnemyAnimator : MonoBehaviour
         animator.enabled = false;
     }
 
-    public void SetWalkingAnimation(bool isWalking)
+    public void SetWalkAnimation(bool isWalking)
     {
         animator.SetBool("isWalking", isWalking);
+    }
+
+    public void SetAttackAnimation(bool isAttacking)
+    {
+        animator.SetBool("isAttacking", isAttacking);
     }
 }

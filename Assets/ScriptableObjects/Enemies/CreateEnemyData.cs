@@ -18,6 +18,7 @@ public class EnemyData : ScriptableObject
     public float maxHealth;
     public float attackDamage;
     public float moveSpeed;
+    public float attackSpeed;
 
     [Header("Behavior")]
     public bool chasePlayer;

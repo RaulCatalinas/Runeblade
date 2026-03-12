@@ -23,11 +23,15 @@ public class PlatformMovementController : MonoBehaviour
     {
         if (randomizeMovement && waypoints.Length < 3)
         {
-            throw new InvalidOperationException("At least 3 waypoints are required for random movement.");
+            throw new InvalidOperationException(
+                "At least 3 waypoints are required for random movement."
+            );
         }
-        if (waypoints.Length < 2)
+        else if (!randomizeMovement && waypoints.Length < 2)
         {
-            throw new InvalidOperationException("At least 2 waypoints are required for the platform to move.");
+            throw new InvalidOperationException(
+                "At least 2 waypoints are required for the platform to move."
+            );
         }
 
         horizontalConstraints =
@@ -39,6 +43,8 @@ public class PlatformMovementController : MonoBehaviour
         LastPosition = rb.position;
     }
 
+    private Vector2 nextPosition;
+
     public void Move()
     {
         LastPosition = rb.position;
@@ -46,18 +52,24 @@ public class PlatformMovementController : MonoBehaviour
         if (!randomizeMovement) MoveOnOrder();
         else MoveRandomly();
 
-        Delta = rb.position - LastPosition;
+        Delta = nextPosition - LastPosition;
     }
 
     void MoveOnOrder()
     {
         var target = waypoints[currentWaypointIndex].position;
-        var newPos = Vector2.MoveTowards(rb.position, target, moveSpeed * Time.fixedDeltaTime);
+
+        nextPosition = Vector2.MoveTowards(
+            rb.position,
+            target,
+            moveSpeed * Time.fixedDeltaTime
+        );
 
         FreezeRigidbody(target);
-        rb.MovePosition(newPos);
+        rb.MovePosition(nextPosition);
 
         if (Vector2.Distance(rb.position, target) > arrivalThreshold) return;
+
         if (!goingForward)
         {
             if (currentWaypointIndex <= 0)
@@ -69,7 +81,6 @@ public class PlatformMovementController : MonoBehaviour
             {
                 currentWaypointIndex--;
             }
-
             return;
         }
 
@@ -92,9 +103,13 @@ public class PlatformMovementController : MonoBehaviour
         }
 
         var target = waypoints[currentTargetIndex].position;
-        var newPos = Vector2.MoveTowards(rb.position, target, moveSpeed * Time.fixedDeltaTime);
+        nextPosition = Vector2.MoveTowards(
+            rb.position,
+            target,
+            moveSpeed * Time.fixedDeltaTime
+        );
 
-        rb.MovePosition(newPos);
+        rb.MovePosition(nextPosition);
 
         if (Vector2.Distance(rb.position, target) <= arrivalThreshold)
         {
@@ -118,6 +133,10 @@ public class PlatformMovementController : MonoBehaviour
     {
         transform.position = waypoints[0].position;
         LastPosition = rb.position;
+        nextPosition = rb.position;
         Delta = Vector2.zero;
+        currentWaypointIndex = 0;
+        goingForward = true;
+        currentTargetIndex = -1;
     }
 }
