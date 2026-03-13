@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class MainMenuSelectorController : MonoBehaviour
+public class SelectorController : MonoBehaviour
 {
     [SerializeField] private Button[] menuButtons;
     [SerializeField] private RectTransform selectorArrow;

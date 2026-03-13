@@ -66,19 +66,23 @@ public class PlayerController : MonoBehaviour
         if (value.isPressed) dashRequested = true;
     }
 
+    public void OnPause(InputValue _)
+    {
+        PauseManager.Instance.PauseGame();
+    }
+
     void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("WorldLimit"))
-        {
-            Debug.Log("The player has gone beyond the boundaries of the world. Reappearing in the last safe position.");
+        if (!collision.CompareTag("WorldLimit")) return;
 
-            var lastCheckpointActivated = GameManager.Instance.checkpointActivated;
-            var respawnPoint =
-                lastCheckpointActivated != null
-                    ? lastCheckpointActivated
-                    : startPoint.position;
+        Debug.Log("The player has gone beyond the boundaries of the world. Reappearing in the last safe position.");
 
-            gameObject.transform.position = respawnPoint;
-        }
+        var lastCheckpointActivated = GameManager.Instance.checkpointActivated;
+        var respawnPoint =
+            lastCheckpointActivated != null
+                ? lastCheckpointActivated
+                : startPoint.position;
+
+        gameObject.transform.position = respawnPoint;
     }
 }

@@ -4,7 +4,6 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
-    public bool IsGamePaused { get; private set; }
     public GameSaveData? gameData { get; private set; }
     public int currentSlotNumber { get; private set; }
     public Vector3 checkpointActivated { get; private set; }
@@ -34,7 +33,7 @@ public class GameManager : MonoBehaviour
 
     public void GoToSettings()
     {
-        LoadScene("Settings");
+        UIManager.Instance.ShowPanel(PanelType.Settings);
     }
 
     public void GoToMainMenu()
@@ -59,12 +58,6 @@ public class GameManager : MonoBehaviour
         }
 
         Debug.Log($"Loading Levels/World{gameData.Value.currentWorld}/Level{gameData.Value.currentLevel}...");
-    }
-
-    public void TogglePauseGame()
-    {
-        IsGamePaused = !IsGamePaused;
-        Time.timeScale = IsGamePaused ? 0 : 1;
     }
 
     public void ActivateCheckpoint(Vector3 checkpointPosition)
